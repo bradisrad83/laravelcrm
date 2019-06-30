@@ -18,22 +18,23 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/logout', 'Auth\LoginController@logout');
 
 Route::get('/companies', 'CompanyController@index');
 Route::get('/companies/{company}', 'CompanyController@show');
-Route::post('/companies', 'CompanyController@create');
+Route::post('/companies', 'CompanyController@store');
 Route::patch('/companies/{company}', 'CompanyController@update');
 Route::delete('/companies/{company}', 'CompanyController@destroy');
 
 Route::get('/users', 'UserController@index');
 Route::get('/users/{user}', 'UserController@show');
-Route::post('/users', 'UserController@create');
+Route::post('/users', 'UserController@store');
 Route::patch('/users/{user}', 'UserController@update');
 Route::delete('/users/{user}', 'UserController@destroy');
 
 Route::get('/employees', 'EmployeeController@index');
 Route::get('/employees/{employee}', 'EmployeeController@show');
-Route::post('/employees', 'EmployeeController@create');
+Route::post('/employees', 'EmployeeController@store');
 Route::patch('/employees/{employee}', 'EmployeeController@update');
 Route::delete('/employees/{employee}', 'EmployeeController@destroy');
 

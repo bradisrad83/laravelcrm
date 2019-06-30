@@ -3,6 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Requests\StoreCompany;
+use App\Http\Requests\UpdateCompany; 
+use Illuminate\Support\Facades\Storage;
+use App\Company;
+use Auth;
 
 class CompanyController extends Controller
 {
@@ -13,17 +18,8 @@ class CompanyController extends Controller
      */
     public function index()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        $this->authorize('viewAny', 'App\Company');
+        return view('companies.allcompanies')->with('companies', Company::all())->with('user', Auth::user());
     }
 
     /**
@@ -32,9 +28,10 @@ class CompanyController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreCompany $request)
     {
-        //
+        $company = new Company();
+        return $company->createNewCompany($request->validated());
     }
 
     /**
@@ -43,42 +40,35 @@ class CompanyController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Company $company)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
+        $this->authorize('view', $company);
+        return $company;
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  App\Company
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateCompany $request, Company $company)
     {
-        //
+        $this->authorize('update', $company);
+        $companyToUpdate = new Company();
+        return $companyToUpdate->updateCompanyDetails($company, $request->validated());
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  App\Company
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Company $company)
     {
-        //
+        $this->authorize('delete', $company);
+        $company->delete();
     }
 }
