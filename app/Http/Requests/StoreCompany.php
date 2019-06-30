@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Auth;
 
 class StoreCompany extends FormRequest
 {
@@ -13,7 +14,7 @@ class StoreCompany extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return Auth::user()->isAdmin();
     }
 
     /**
@@ -24,7 +25,8 @@ class StoreCompany extends FormRequest
     public function rules()
     {
         return [
-            //
+            'name'  => 'required|string',
+            'email' => 'required|email'
         ];
     }
 }

@@ -5,6 +5,8 @@ namespace App;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Http\Request;
+use App\Employee;
 use App\Role;
 
 class User extends Authenticatable
@@ -93,5 +95,49 @@ class User extends Authenticatable
     public function isManager()
     {
         return $this->hasRole('manager');
+    }
+
+    /**
+     * create a resource
+     * 
+     * @param first_name
+     * @param last_name
+     * @param email
+     * @param phone
+     * 
+     * @return App\Employee (resource)
+     */
+    public function createNewUser(Request $request)
+    {
+        $newUser = $this->create([
+            'name'          => $request->input('name'),
+            'email'         => $request->input('email'),
+            'password'      => bcrypt($request->input('password')),
+            'role_id'       => $request->input('role'),
+            'company_id'    => ($request->input('company_id')) ? $request->input('company_id') : null
+        ]);
+        return $newUser;
+    }
+
+    /**
+     * create a resource
+     * 
+     * @param App\User int
+     * @param first_name
+     * @param last_name
+     * @param email
+     * @param phone
+     * 
+     * @return App\Employee (resource)
+     */
+    public function updateUser(User $user, Request $request)
+    {
+        $user->name = $request->input('name');
+        $user->email = $request->input('email');
+        ($request->input('password')) ?  $user->password = bcrypt($request->input('password')) : null;
+        $user->role_id = $request->input('role_id');
+        ($request->input('company_id')) ? $request->input('company_id') : null;
+        $user->save();
+        return $user;
     }
 }
