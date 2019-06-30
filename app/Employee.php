@@ -19,4 +19,14 @@ class Employee extends Model
      * @var array
      */
     protected $guarded = [];
+
+    /**
+     * set up the employee/company relationship
+     *
+     * @return Company::class
+     */
+    public function company() 
+    {
+        return $this->belongsTo('App\Company');
+    }
 }
