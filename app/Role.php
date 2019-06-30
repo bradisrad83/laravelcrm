@@ -19,4 +19,15 @@ class Role extends Model
      * @var array
      */
     protected $guarded = [];
+
+    /**
+     * inverse relationship between user/role
+     * a role can belong to many users
+     * 
+     * @return User::class
+     */
+    public function user()
+    {
+        return $this->hasMany('App\User');
+    }
 }

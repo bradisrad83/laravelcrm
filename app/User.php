@@ -44,4 +44,54 @@ class User extends Authenticatable
      * @var string
      */
     protected $table = 'users';
+
+    /**
+     * Always attaches the roles when user(s)
+     * are returned
+     */
+    public $with = ['role'];
+
+    /**
+     * set up the user/role relationship
+     *
+     * @return Role::class
+     */
+    public function role() 
+    {
+        return $this->belongsTo('App\Role');
+    }
+
+    /**
+     * checks a role
+     * 
+     * @param string $role
+     * 
+     * @return
+     */
+    public function hasRole(string $role)
+    {
+        return null !== $this->role()->Where('name', $role)->first();
+    }
+
+    /**
+     * Checks if the user is an
+     * admin role
+     * 
+     * @return boolean
+     */
+    public function isAdmin()
+    {
+        return $this->hasRole('admin');
+    }
+
+    /**
+     * Checks if the user is an
+     * manager role
+     * 
+     * @return boolean
+     */
+    public function isManager()
+    {
+        return $this->hasRole('manager');
+    }
 }
