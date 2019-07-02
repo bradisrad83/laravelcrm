@@ -6,6 +6,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use App\Employee;
 use App\Role;
 
@@ -19,7 +20,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'email', 'password','role_id','company_id',
     ];
 
     /**
@@ -98,6 +99,17 @@ class User extends Authenticatable
     }
 
     /**
+     * set up relationships between
+     * company and user
+     * 
+     * @return Company::class
+     */
+    public function company() 
+    {
+        return $this->belongsTo('App\Company');
+    }
+
+    /**
      * create a resource
      * 
      * @param first_name
@@ -107,7 +119,7 @@ class User extends Authenticatable
      * 
      * @return App\Employee (resource)
      */
-    public function createNewUser(Request $request)
+    public function createNewUser($request)
     {
         $newUser = $this->create([
             'name'          => $request->input('name'),
@@ -134,9 +146,9 @@ class User extends Authenticatable
     {
         $user->name = $request->input('name');
         $user->email = $request->input('email');
-        ($request->input('password')) ?  $user->password = bcrypt($request->input('password')) : null;
-        $user->role_id = $request->input('role_id');
-        ($request->input('company_id')) ? $request->input('company_id') : null;
+        ($request->password) ?  $user->password = bcrypt($request->input('password')) : null;
+        $user->role_id = $request->input('role');
+        (!$request->company_id) ? $user->company_id = $request->input('company_id') : null;
         $user->save();
         return $user;
     }

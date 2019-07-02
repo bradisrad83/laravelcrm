@@ -1,11 +1,11 @@
 @extends('layouts.logged-in')
 
 @section('content')
-    <div>
+    <div class="companies">
     <div id="cover">
                 <!-- <img src="https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif" alt="">  -->
         </div>
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#newCompany">
+            <button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#newCompany">
                     Add Company
             </button><br><br>
             <table class="table-bordered table-hover" id="companiesTable" style="width: 100%!important;">
@@ -34,8 +34,9 @@
                                         <h4 class="modal-title" id="myModalLabel">Edit Company</h4>
                                     </div>
                                     <div class="modal-body">
-                                            <form action="/edituser" method="POST" autocomplete="new-password" enctype="multipart/form-data">
+                                            <form action="/companies/{{$company->id}}" method="POST" autocomplete="new-password" enctype="multipart/form-data">
                                                 {{ csrf_field() }}
+                                                @method('PATCH')
                                                 <input type="hidden" value="{{$company->id}}" name="id">
                                                 <div class="form-group row">
                                                         <label for="name" class="col-sm-2 form-control-label">Name</label>
@@ -72,15 +73,16 @@
                                                         <div class="col-sm-6">
                                                           <input class="form-control"
                                                                  type="file"
-                                                                 name="email"
+                                                                 name="logo"
                                                                  value="{{$company->logo}}"
                                                                  >
                                                         </div>
                                                 </div>
                                               <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                                               <button type="submit" value="submit" class="btn btn-primary">Save</button>
-                                              <button type="submit" value="submit" class="btn btn-danger" formaction="/deletecompany">Delete</button>
+                                              <button type="submit" value="submit" class="btn btn-danger" formaction="/companies/{{$company->id}}/delete">Delete</button>
                                             </form>
+                                            <a href="/companies/{{$company->id}}"><button class="btn btn-success">View Company As Manager</button></a>
                                     </div>
                                 </div>
                             </div>
@@ -94,7 +96,7 @@
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
-              <h4 class="modal-title" id="myModalLabel">Create New User</h4>
+              <h4 class="modal-title" id="myModalLabel">Create New Company</h4>
             </div>
             <div class="modal-body">
                   <form action="/companies" method="POST" enctype="multipart/form-data">
@@ -124,7 +126,7 @@
                             <div class="col-sm-6">
                               <input class="form-control"
                                      type="text"
-                                     name="logo"
+                                     name="website"
                                      placeholder="Company Website"
                                     >
                             </div>
@@ -145,15 +147,33 @@
           </div>
         </div>
 </div>
-    <!-- <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js">
-        $(document).ready(function(){
-            $("#cover").fadeOut();
-            $('#companiesTable').DataTable({
-                    // "paging":   false,
-                    // "ordering": false,
-                    "info":     false,
-                    "scrollX": true
-            });
-        });
-    </script> -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js">
+        function viewCompanyAsManager(){
+          console.log('hitting');
+          console.log('hitting');
+          console.log('hitting');
+          console.log('hitting');
+          console.log('hitting');
+          console.log('hitting');
+          console.log('hitting');
+          console.log('hitting');
+          console.log('hitting');
+          console.log('hitting');
+          console.log('hitting');
+          console.log('hitting');
+          console.log('hitting');
+          console.log('hitting');
+          console.log('hitting');
+          console.log('hitting');
+          console.log('hitting');
+          console.log('hitting');
+          console.log('hitting');
+          console.log('hitting');
+          console.log('hitting');
+          console.log('hitting');
+          console.log('hitting');
+          console.log('hitting');
+          console.log('hitting');
+        }
+    </script>
 @endsection

@@ -30,6 +30,7 @@
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <link  href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" rel="stylesheet">
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/crm.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/css/bootstrap-datepicker.standalone.css ">
 </head>
@@ -54,12 +55,12 @@
                 <li role="presentation"><a href="/companies">Companies</a></li>
                 <li role="presentation"><a href="/users">Users</a></li>
             @else
-                <li role="presentation"><a href="/companies/{company}">Company</a></li>
+                <li role="presentation"><a href="/companies/{{$user->company_id}}">Company</a></li>
                 <li role="presentation"><a href="/employees">Employees</a></li>
             @endif
             <div class="signed-in">
                 <i class="fa fa-user" aria-hidden="true"></i>
-                <p><span>NAME</span> -  <span>ROLE</span></p>
+                <p><span>{{$user->name}}</span><br><span>{{$user->role->name}}</span></p>
                 <a href="/logout">Log Out</a>
             </div>
         </ul>
@@ -70,5 +71,23 @@
     </div>
     </div>
     </div>
+    <script>
+        $(document).ready(function(){
+
+        });
+        function viewCompany() {
+            let company = $("#companyToView :selected").val(); 
+            $.ajax({
+                    url: '/companies/'+company,
+                    method: 'get',
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                    }, 
+                    success: function(result){
+                        location.href="/companies/"+company;
+                    }
+            });
+        }
+    </script>
 </body>
 </html>

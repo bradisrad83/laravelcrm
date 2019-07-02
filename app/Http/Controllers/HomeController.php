@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use App\Company;
 use Auth;
 
 class HomeController extends Controller
@@ -25,6 +26,6 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home')->with('user', Auth::user());
+        return view('home')->with('user', Auth::user())->with('companies', Company::all());
     }
 }

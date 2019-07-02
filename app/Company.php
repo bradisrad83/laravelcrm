@@ -5,6 +5,9 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Input;
 use App\Company;
 
 
@@ -35,6 +38,15 @@ class Company extends Model
     }
 
     /**
+     * set up the user/company relationship
+     * 
+     * @return User::class
+     */
+    public function users()
+    {
+        return $this->hasMany('App\User');
+    }
+    /**
      * create a resource
      * 
      * @param name
@@ -44,14 +56,14 @@ class Company extends Model
      * 
      * @return App\Company (resource)
      */
-    public function createNewCompany(Request $request)
+    public function createNewCompany($request)
     {
         $newCompany = $this->create([
             'name'      => $request->input('name'),
             'email'     => $request->input('email'),
             'website'   => ($request->website) ? $request->input('website') : null,
         ]);   
-        if($request->logo) 
+        if($request->input('logo')) 
             return $this->storeCompanyLogo($newCompany, $request);
         return $newCompany;
     }
@@ -68,8 +80,11 @@ class Company extends Model
      */
     public function storeCompanyLogo(Company $newCompany, $request)
     {
-        $fileName = $newCompany->name.'logo.jpg';
-        $newCompany->update(['logo' => Storage::putFile($fileName, $request->file('logo'))]);
+        $file = Input::file('logo');
+        Log::debug($file);
+        Log::debug($file->getClientOriginalExtension());
+        $fileName = $newCompany->name.".".$file->getClientOriginalExtension();
+        $newCompany->update(['logo' => Storage::put('logos', $file, 'public')]);
         return $newCompany;
     }
 
@@ -86,12 +101,14 @@ class Company extends Model
      */
     public function updateCompanyDetails(Company $company, Request $request)
     {
+        Log::debug($request->input('logo'));
         $company->name = $request->input('name');
         $company->email = $request->input('email');
-        if($request->input('webstie'))
-            $company->webstie = $request->input('webstie');
+        if($request->input('website'))
+            $company->website = $request->input('website');
         $company->save();
-        if($request->input('logo'))  {
+        if($request->logo)  {
+            Log::debug('there is a logo');
             Storage::delete($company->logo);
             return $this->storeCompanyLogo($company, $request);
         }
