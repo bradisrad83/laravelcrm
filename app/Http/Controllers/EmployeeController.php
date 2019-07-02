@@ -3,8 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Http\Requests\StoreEmployee;
-use App\Http\Requests\UpdateEmployee; 
 use App\Employee;
 use Auth;
 
@@ -26,10 +24,15 @@ class EmployeeController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreEmployee $request)
+    public function store(Request $request)
     {
+        $request->validate([
+            'first_name'    => 'required|string',
+            'last_name'     => 'required|string',
+        ]);
         $employee = new Employee();
-        return $employee->createNewEmployee($reqest->validated());
+        $employee->createNewEmployee($request);
+        return redirect('/companies'.'/'.$request->company_id);
     }
 
     /**
@@ -51,10 +54,15 @@ class EmployeeController extends Controller
      * @param  App\Employee int
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateEmployee $request, Employee $employee)
+    public function update(Request $request, Employee $employee)
     {
-        $emplyeeToUpdate = new Employee();
-        return $emplyeeToUpdate->update($employee, $request->validated());
+        $request->validate([
+            'first_name'    => 'required|string',
+            'last_name'     => 'required|string',
+        ]);
+        $employeeToUpdate = new Employee();
+        $employeeToUpdate->updateEmployee($request, $employee);
+        return redirect('/companies'.'/'.$employee->company_id);
     }
 
     /**

@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Http\Requests\StoreCompany;
-use App\Http\Requests\UpdateCompany; 
+use Illuminate\Http\Request; 
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 use App\Company;
 use Auth;
 
@@ -28,10 +27,15 @@ class CompanyController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreCompany $request)
+    public function store(Request $request)
     {
+        $request->validate([
+            'name'      => 'required|string',
+            'email'     => 'required|email',
+        ]);
         $company = new Company();
-        return $company->createNewCompany($request->validated());
+        $company->createNewCompany($request);
+        return redirect('/companies');
     }
 
     /**
@@ -43,6 +47,7 @@ class CompanyController extends Controller
     public function show(Company $company)
     {
         $this->authorize('view', $company);
+        return view('companies.company')->with('user', Auth::user())->with('company', $company->load('employees'));
         return $company;
     }
 
@@ -53,11 +58,16 @@ class CompanyController extends Controller
      * @param  App\Company
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateCompany $request, Company $company)
+    public function update(Request $request, Company $company)
     {
         $this->authorize('update', $company);
+        $request->validate([
+            'name'      => 'required|string',
+            'email'     => 'required|email',
+        ]);
         $companyToUpdate = new Company();
-        return $companyToUpdate->updateCompanyDetails($company, $request->validated());
+        $companyToUpdate->updateCompanyDetails($company, $request);
+        return redirect('/companies');
     }
 
     /**

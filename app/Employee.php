@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use App\Employee;
 
 class Employee extends Model
@@ -42,13 +43,14 @@ class Employee extends Model
      * 
      * @return App\Employee (resource)
      */
-    public function createNewCompany(Request $request)
+    public function createNewEmployee($request)
     {
         $newEmployee = $this->create([
             'first_name'    => $request->input('first_name'),
             'last_name'     => $request->input('last_name'),
             'email'         => ($request->input('email')) ? $request->input('email') : null,
             'phone'         => ($request->input('phone')) ? $request->input('phone') : null,
+            'company_id'    => $request->input('company_id'),
         ]);
         return $newEmployee;
     }
@@ -63,7 +65,7 @@ class Employee extends Model
      * @param App\Employee as $employee
      * 
      */
-    public function updateEmployee(Employee $employee, Request $request)
+    public function updateEmployee(Request $request, Employee $employee)
     {
         $employee->first_name = $request->input('first_name');
         $employee->last_name = $request->input('last_name');

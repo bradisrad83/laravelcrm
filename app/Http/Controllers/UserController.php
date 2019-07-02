@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Http\Requests\StoreEmployee;
-use App\Http\Requests\UpdateEmployee; 
+use Illuminate\Support\Facades\Log;
+use App\User;
+use App\Role;
+use App\Company;
+use Auth;
 
 class UserController extends Controller
 {
@@ -16,7 +19,7 @@ class UserController extends Controller
     public function index()
     {
         $this->authorize('viewAny', 'App\User');
-        return User::all();
+        return view('users.allusers')->with('allUsers', User::with('company')->get())->with('user', Auth::user())->with('roles', Role::all())->with('companies', Company::all());
     }
 
     /**
@@ -25,10 +28,15 @@ class UserController extends Controller
      * @param  App\Http\Requests\StoreEmployee  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreEmployee $request)
+    public function store(Request $request)
     {
+        $request->validate([
+            'name'      => 'required|string',
+            'email'     => 'required|email',
+        ]);
         $user = new User();
-        return $user->createNewUser($request->validated());
+        $user->createNewUser($request);
+        return redirect('/users');
 
     }
 
@@ -51,10 +59,15 @@ class UserController extends Controller
      * @param  App\User $user
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateEmployee $request, User $user)
+    public function update(Request $request, User $user)
     {
+        $request->validate([
+            'name'      => 'required|string',
+            'email'     => 'required|email',
+        ]);
         $userToUpdate = new User();
-        return $userToUpdate->updateUser($user, $request->validated());
+        $userToUpdate->updateUser($user, $request);
+        return redirect('/users');
     }
 
     /**
@@ -65,7 +78,8 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        $this->authorize('delte', $user);
+        $this->authorize('delete', $user);
         $user->delete();
+        return redirect('/users');
     }
 }
