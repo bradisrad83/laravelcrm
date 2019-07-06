@@ -1,0 +1,71 @@
+.sidebar{
+    position: absolute;
+    top: 75px;
+    left: 0px;
+    width: 200px;
+    height: 100%;
+}
+li{
+    list-style: none;
+    font-size: 22px;
+    padding: 1%;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+.page-header h1{
+    padding-top: 15px;
+    margin-left: 40px;
+}
+.signed-in{
+    /* text-align: center; */
+}
+.signed-in p{
+    font-size: 18px;
+}
+.signed-in a{
+    font-size: 14px;
+}
+a:hover{
+    text-decoration: none;
+    transform: scale(1.5);
+}
+.fa{
+    font-size: 40px !important;
+}
+.companies{
+    margin-left: 250px;
+}
+.users{
+    margin-left: 250px;
+}
+.company{
+    margin-left: 250px;
+}
+td, th{
+    padding: 2% !important;
+    padding-right: 15px !important;
+    padding-left: 15px !important;
+}
+th{
+    font-size: 14px;
+    font-weight: bold;
+}
+td{
+    font-size: 14px;
+}
+button{
+    font-size: 16px !important;
+    margin-bottom: 15px !important;
+}
+.company h2{
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+.company h3{
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+.company button{
+    margin-left: 10px;
+    margin-right: 10px;
+}
