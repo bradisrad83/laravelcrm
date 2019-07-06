@@ -5,6 +5,7 @@ namespace App\Policies;
 use App\User;
 use App\Employee;
 use Illuminate\Auth\Access\HandlesAuthorization;
+use Illuminate\Support\Facades\Log;
 
 class EmployeePolicy
 {
@@ -18,7 +19,7 @@ class EmployeePolicy
      */
     public function viewAny(User $user)
     {
-        //
+        return $user->isAdmin();
     }
 
     /**
@@ -41,7 +42,7 @@ class EmployeePolicy
      */
     public function create(User $user)
     {
-        //
+
     }
 
     /**
@@ -65,6 +66,8 @@ class EmployeePolicy
      */
     public function delete(User $user, Employee $employee)
     {
+        Log::debug($user);
+        Log::debug('im here');
         return $user->isAdmin() || $user->company_id == $employee->company_id;
     }
 

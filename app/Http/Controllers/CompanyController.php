@@ -48,7 +48,6 @@ class CompanyController extends Controller
     {
         $this->authorize('view', $company);
         return view('companies.company')->with('user', Auth::user())->with('company', $company->load('employees'));
-        return $company;
     }
 
     /**
@@ -80,5 +79,6 @@ class CompanyController extends Controller
     {
         $this->authorize('delete', $company);
         $company->delete();
+        return redirect('/companies');
     }
 }

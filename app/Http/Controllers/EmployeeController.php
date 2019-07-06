@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use App\Employee;
 use Auth;
 
@@ -15,6 +16,7 @@ class EmployeeController extends Controller
      */
     public function index()
     {
+        $this->authorize('viewAny', 'App\Employee');
         return Employee::all();
     }
 
@@ -43,7 +45,7 @@ class EmployeeController extends Controller
      */
     public function show(Employee $employee)
     {
-        $this->authorize('view');
+        $this->authorize('view', $employee);
         return $employee;
     }
 
@@ -56,6 +58,7 @@ class EmployeeController extends Controller
      */
     public function update(Request $request, Employee $employee)
     {
+        $this->authorize('update', $employee);
         $request->validate([
             'first_name'    => 'required|string',
             'last_name'     => 'required|string',
@@ -73,7 +76,9 @@ class EmployeeController extends Controller
      */
     public function destroy(Employee $employee)
     {
-        $this->authorize('delete');
+        $this->authorize('delete', $employee);
+        $companyId = $employee->company_id;
         $employee->delete();
+        return redirect('/companies'.'/'.$companyId);
     }
 }
